@@ -13,7 +13,7 @@ This is early version of the component, so bug and inconsistency may occur. Befo
 
 ## Download Component (Current version 0.2.0.0)
 
-[Download](https://github.com/OOlashyn/PCF-WebFormStepsVisualizer/releases)
+[Download](https://github.com/OOlashyn/PCF-WebFormStepVisualizer/releases)
 
 ## Planned updates
 
