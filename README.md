@@ -8,7 +8,7 @@ This is early version of the component, so bug and inconsistency may occur. Befo
 
 ## Known Issues
 
-* Incosistent placement of the last step
+* Inconsistent placement of the last step
 * Sidebar show data only when clicking on the step label
 
 ## Download Component (Current version 0.2.0.0)
