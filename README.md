@@ -4,7 +4,7 @@ Make it easier to work with Web Forms by visualizing your Web Form Steps as a fl
 
 This is early version of the component, so bug and inconsistency may occur. Before submitting bug or an issue check known issues section below.
 
-![Demo](https://github.com/OOlashyn/PCF-WebFormStepsVisualizer/blob/master/Screenshots/webformstepvisualizer_v0_2_0_0.gif?raw=true)
+![Demo](https://github.com/OOlashyn/PCF-WebFormStepVisualizer/blob/master/Screenshots/webformstepvisualizer_v0_2_0_0.gif?raw=true)
 
 ## Known Issues
 
