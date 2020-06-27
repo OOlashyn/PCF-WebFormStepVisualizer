@@ -4,6 +4,8 @@ Make it easier to work with Web Forms by visualizing your Web Form Steps as a fl
 
 This is early version of the component, so bug and inconsistency may occur. Before submitting bug or an issue check known issues section below.
 
+![Demo](https://github.com/OOlashyn/PCF-WebFormStepsVisualizer/blob/master/Screenshots/webformstepvisualizer.gif?raw=true)
+
 ## Known Issues
 
 * Incosistent placement of the last step
@@ -18,4 +20,4 @@ This is early version of the component, so bug and inconsistency may occur. Befo
 * Add Create/Update/Delete operations
 * Allow update of order of steps by drag and drop + linking
 * Data refresh within component
-* Adding arrows to lines (as soon as library that I use will implent it)
+* Adding arrows to lines (as soon as library that I use will implement it)
