@@ -3,5 +3,7 @@
     "compilerOptions": {
         "typeRoots": ["node_modules/@types"],
         "esModuleInterop": true,
+        "target": "ES6",
+        "lib": ["ES2020", "DOM"]
     }
 }

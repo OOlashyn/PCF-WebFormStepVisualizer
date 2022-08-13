@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="dancingwithcrm" constructor="WebFormStepsVisualizer" version="0.2.0" display-name-key="WebFormStepsVisualizer" description-key="WebFormStepsVisualizer description" control-type="standard">
+  <control namespace="DancingWithCrmControls" constructor="WebFormStepsVisualizer" version="1.0.0" display-name-key="WebFormStepsVisualizer" description-key="WebFormStepsVisualizer description" control-type="virtual">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="placeHolder" display-name-key="Placeholder field" description-key="This field will be used as a placeholder only" of-type="SingleLine.Text" usage="bound" required="true" />
 
     <resources>
       <code path="index.ts" order="1"/>
+      <css path="assets/css/main.css" order="1" />
+      <platform-library name="React" version="16.8.6" />
+      <platform-library name="Fluent" version="8.29.0" />
     </resources>
     <feature-usage>
       <uses-feature name="Utility" required="true" />

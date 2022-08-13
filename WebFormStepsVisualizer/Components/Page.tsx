@@ -1,22 +1,7 @@
 import * as React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0px;
-    max-width: 100vw;
-    max-height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-    font-family: sans-serif;
-  }
-
-  *, :after, :before {
-    box-sizing: inherit;
-  }
-`
-
-const PageContent = styled.div`
+const PageContent = styled.div.attrs(props => ({className: props.className,}))`
   display: flex;
   flex-direction: row;
   flex: 1;
@@ -24,11 +9,11 @@ const PageContent = styled.div`
   max-width: 100vw;
   max-height: 100vh;
   height: 800px;
+  white-space: normal;
 `
 
 export const Page = ({ children }: { children: any}) => (
-  <PageContent>
+  <div className='DancingWithCrmControls.WebFormStepsVisualizer'>
     {children}
-    <GlobalStyle />
-  </PageContent>
+  </div>
 )

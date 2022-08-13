@@ -1,50 +1,38 @@
 import * as React from "react";
+
+import { PrimaryButton } from "@fluentui/react/lib/Button";
 import styled from "styled-components";
 
 import {
-  Stack,
-  TextField,
-  Dropdown,
-  IDropdownOption,
-  PrimaryButton,
-  IStackTokens,
-} from "@fluentui/react";
+  WebFormStepType,
+  WebFormStepMode,
+  WebFormStep,
+  IEntity,
+  IAppActions,
+  ISidebarMessageBar,
+} from "../utils/Interfaces";
 
-import { WebFormStepType, WebFormStepMode } from "../utils/WebFormInterfaces";
+import { CreateForm } from "./Forms/CreateForm";
+
+import { EditForm } from "./Forms/EditForm";
+import { MessageBar, MessageBarType } from "@fluentui/react/lib/MessageBar";
+import { AsyncPrimaryButton } from "./Buttons/AsyncPrimaryButton";
 
 const SidebarWrapper = styled.div`
   width: 300px;
-  background: white;
+  background: #f3f2f1;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   text-align: start;
 `;
 
-const Message = styled.div`
+const TextBlock = styled.div`
   margin: 10px;
   padding: 10px;
   line-height: 1.4em;
+  color: black;
 `;
-
-const verticalGapStackTokens: IStackTokens = {
-  childrenGap: 10,
-  padding: 10,
-};
-
-const typeOptions: IDropdownOption[] = [
-  { key: WebFormStepType.Condition, text: "Condtion" },
-  { key: WebFormStepType.LoadForm, text: "Load Form" },
-  { key: WebFormStepType.LoadTab, text: "Load Tab" },
-  { key: WebFormStepType.LoadUserControl, text: "Load User Control" },
-  { key: WebFormStepType.Redirect, text: "Redirect" },
-];
-
-const modeOptions: IDropdownOption[] = [
-  { key: WebFormStepMode.Insert, text: "Insert" },
-  { key: WebFormStepMode.Edit, text: "Edit" },
-  { key: WebFormStepMode.ReadOnly, text: "Read Only" },
-];
 
 export interface ISelectedEntityProps {
   title: string;
@@ -52,45 +40,132 @@ export interface ISelectedEntityProps {
   type: WebFormStepType;
   mode: WebFormStepMode;
   id: string;
-  condition:string;
+  condition: string;
 }
 
 interface ISidebarProps {
-  selected: Partial<ISelectedEntityProps>;
-  openRecord: Function;
+  clearSelected: () => void;
+  webFormSteps: WebFormStep[];
+  setWebFormSteps: React.Dispatch<React.SetStateAction<WebFormStep[]>>;
+  selectedNodeId: string;
+  isCreateMode: boolean;
+  setCreateMode: Function;
+  createNewNode: (newWebFormStep: WebFormStep) => void;
+  entities: IEntity[];
+  isMetadataLoading: boolean;
+  removeNode: (nodeId: string) => void;
+  actions: IAppActions;
+  updateChangedRecords: () => Promise<boolean | null>;
+  updateNode: (webFormStep: WebFormStep) => void;
 }
 
 export const Sidebar = (props: ISidebarProps) => {
-  const selected = props.selected;
-  console.log("selected", selected);
+  const [messageBar, setMessageBar] = React.useState<ISidebarMessageBar>();
+
+  const updateModifiedRecords = async () => {
+    let result = await props.updateChangedRecords();
+
+    if(result === true) {
+      setMessageBar({messageType: "success", messageText: "Records updated successfully"});
+    }
+
+    if(result === false) {
+      setMessageBar({messageType: "error", messageText: "An error occured. Please check console for more details"});
+    }
+  }
+
+  let editForm = null;
+  let defaultSidebar = null;
+  let createForm = null;
+
+  if (props.selectedNodeId != "") {
+    editForm = (
+      <EditForm
+        selectedNodeId={props.selectedNodeId}
+        setWebFormSteps={props.setWebFormSteps}
+        updateNode={props.updateNode}
+        clearSelected={props.clearSelected}
+        webFormSteps={props.webFormSteps}
+        entities={props.entities}
+        isMetadataLoading={props.isMetadataLoading}
+        removeNode={props.removeNode}
+        actions={props.actions}
+        setMessageBar={setMessageBar}
+      />
+    );
+  }
+
+  if (props.isCreateMode && props.selectedNodeId == "") {
+    createForm = (
+      <CreateForm
+        setCreateMode={props.setCreateMode}
+        isCreateMode={props.isCreateMode}
+        createNewNode={props.createNewNode}
+        webFormSteps={props.webFormSteps}
+        entities={props.entities}
+        isMetadataLoading={props.isMetadataLoading}
+        createRecord={props.actions.createRecord}
+        setMessageBar={setMessageBar}
+      />
+    );
+  }
+
+  if (!editForm && !createForm) {
+    defaultSidebar = (
+      <>
+        <TextBlock>
+          Click on a Node info icon to see details or create new step using
+          button below
+        </TextBlock>
+        <PrimaryButton
+          iconProps={{ iconName: "EditCreate" }}
+          text="Create new step"
+          style={{ margin: "10px", padding: "10px" }}
+          onClick={(ev) => props.setCreateMode(true)}
+        />
+        <TextBlock>
+          Update existing step order and save changes using button below
+        </TextBlock>
+        <AsyncPrimaryButton
+          iconProps={{ iconName: "Save" }}
+          text="Save changes"
+          loadingText="Saving changes..."
+          style={{ margin: "10px", padding: "10px" }}
+          onClick={updateModifiedRecords}
+        />
+      </>
+    );
+  }
 
   return (
     <SidebarWrapper>
-      {selected !== undefined && selected.type ? (
-        <Stack tokens={verticalGapStackTokens}>
-          <TextField label="Name" value={selected.title} />
-          <TextField label="Entity" value={selected.entity} />
-          <Dropdown
-            label="Type"
-            selectedKey={selected.type}
-            options={typeOptions}
-          />
-          {selected.type == WebFormStepType.Condition ? (<TextField label="Condition" value={selected.condition} />): null}
-          <Dropdown
-            label="Mode"
-            selectedKey={selected.mode}
-            options={modeOptions}
-            disabled={selected.mode == null}
-          />
-          <PrimaryButton
-            iconProps={{ iconName: "OpenInNewWindow" }}
-            text="Open Record"
-            onClick={() => props.openRecord(selected.id)}
-          />
-        </Stack>
-      ) : (
-        <Message>Click on a Node</Message>
+      {messageBar?.messageType == "error" && (
+        <MessageBar
+          messageBarType={MessageBarType.error}
+          isMultiline={true}
+          onDismiss={() => {
+            setMessageBar({messageText: "", messageType: ""});
+          }}
+          dismissButtonAriaLabel="Close"
+        >
+          {messageBar.messageText}
+        </MessageBar>
       )}
+      {messageBar?.messageType == "success" && (
+        <MessageBar
+          messageBarType={MessageBarType.success}
+          isMultiline={true}
+          onDismiss={() => {
+            setMessageBar({messageText: "", messageType: ""});
+          }}
+          dismissButtonAriaLabel="Close"
+        >
+          {messageBar.messageText}
+        </MessageBar>
+      )}
+      {editForm}
+      {createForm}
+      {defaultSidebar}
     </SidebarWrapper>
   );
 };
