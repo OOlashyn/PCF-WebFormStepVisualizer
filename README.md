@@ -12,7 +12,7 @@ Available functionality:
 * Open record in a new tab
 * Reorder/link steps
 
-![Demo](https://github.com/OOlashyn/PCF-WebFormStepVisualizer/blob/master/Screenshots/WebFormStepVisualizer_v1.mp4?raw=true)
+https://github.com/OOlashyn/PCF-WebFormStepVisualizer/blob/master/Screenshots/WebFormStepVisualizer_v1.mp4
 
 ## Install
 
