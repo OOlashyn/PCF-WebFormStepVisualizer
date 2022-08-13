@@ -16,7 +16,7 @@ jobs:
       matrix:
         node-version: [12.x]
     env:
-      msbuildtarget: Solutions/WebFormStepsVisualizer
+      msbuildtarget: Solutions/WebFormStepsVisualizer/src
 
     steps:
       - uses: actions/checkout@v2
